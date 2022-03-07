@@ -1,0 +1,38 @@
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: ggssx
+profiles:
+  - name: local
+    activation:
+      - kubeContext: minikube
+    build:
+      tagPolicy:
+        sha256: {}
+      artifacts:
+        - image: johnnyhuy/todo-backend
+          context: apps/todo-backend
+          docker:
+            cliFlags: 
+              - --platform
+              - linux/amd64
+
+        - image: johnnyhuy/todo-frontend
+          context: apps/todo-frontend
+          docker:
+            cliFlags: 
+              - --platform
+              - linux/amd64
+    deploy:
+      helm:
+        hooks:
+          before:
+            - host:
+                command: ["sh", "-c", "./bin/helm-repo-add.sh"]
+                os: [darwin, linux]
+        releases:
+          - name: kube-apps
+            chartPath: charts/kube-apps
+            wait: true
+            createNamespace: true
+            namespace: kube-apps
