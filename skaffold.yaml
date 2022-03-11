@@ -16,6 +16,10 @@ profiles:
             cliFlags: 
               - --platform
               - linux/amd64
+          sync:
+            manual:
+              - src: apps/todo-backend/src/*
+                dest: .
 
         - image: johnnyhuy/todo-frontend
           context: apps/todo-frontend
@@ -23,6 +27,18 @@ profiles:
             cliFlags: 
               - --platform
               - linux/amd64
+          sync:
+            manual:
+              - src: apps/todo-frontend/src/*
+                dest: .
+              - src: apps/todo-frontend/public/*
+                dest: .
+              - src: apps/todo-frontend/index.html
+                dest: .
+              - src: apps/todo-frontend/tailwind.config.js
+                dest: .
+              - src: apps/todo-frontend/postcss.config.js
+                dest: .
     deploy:
       helm:
         hooks:
