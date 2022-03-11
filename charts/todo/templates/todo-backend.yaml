@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-backend
+spec:
+  ports:
+    - port: 3001
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    kubernetes.io/name: todo-backend
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      kubernetes.io/name: todo-backend
+  template:
+    metadata:
+      labels:
+        kubernetes.io/name: todo-backend
+    spec:
+      containers:
+        - name: todo-backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3001
+              protocol: TCP
