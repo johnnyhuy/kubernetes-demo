@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { nextTick, Ref, ref } from "vue";
+import { nextTick, reactive, Ref, ref } from "vue";
 
 interface Todo {
-  id: number;
+  id: string;
   checked: boolean;
   edit: boolean;
   content: string;
@@ -11,15 +11,26 @@ interface Todo {
 
 defineProps<{ msg: string }>();
 
+let errors: Ref<string[]> = ref([])
+
+// Temp
+const uid = () => {
+  return (
+    String.fromCharCode(Math.floor(Math.random() * 26) + 97) +
+    Math.random().toString(16).slice(2) +
+    Date.now().toString(16).slice(4)
+  );
+};
+
 const items: Ref<Todo[]> = ref([
   {
-    id: 0,
+    id: uid(),
     checked: false,
     edit: false,
     content: "🚨 Item 1",
   },
   {
-    id: 1,
+    id: uid(),
     checked: false,
     edit: false,
     content: "👺 Item 2",
@@ -30,32 +41,38 @@ const clearAllEditedItems = () => {
   for (const item of items.value) {
     item.edit = false;
   }
-}
+};
 
-const onEnterAddItem = (event: { target: HTMLInputElement }) => {
+const onEnterAddItem = (payload: KeyboardEvent) => {
+  const target = payload.target as HTMLInputElement;
+
   items.value.push({
-    id: 0,
+    id: uid(),
     checked: false,
     edit: false,
-    content: event.target.value,
-  })
+    content: target.value,
+  });
 
-  event.target.value = ''
+  target.value = "";
 };
 
-const onEnterItem = () => {
-  clearAllEditedItems()
+const onEnterUpdateItem = () => {
+  clearAllEditedItems();
 };
 
-const clickAwayItem = () => {
-  clearAllEditedItems()
+const clickAwayUpdateItem = () => {
+  clearAllEditedItems();
 };
 
-const clickItem = (todo: Todo) => {
+const updateItem = (todo: Todo) => {
   todo.edit = true;
   nextTick(() => {
     todo.input?.focus();
   });
+};
+
+const deleteItem = (item: Todo) => {
+  items.value = items.value.filter((filterItem) => filterItem.id !== item.id);
 };
 </script>
 
@@ -75,29 +92,69 @@ const clickItem = (todo: Todo) => {
               class="checkbox checkbox-primary checkbox-lg"
             />
           </label>
-          <span
+          <div
             v-if="!item.edit"
-            @click="clickItem(item)"
-            class="ml-4 cursor-pointer"
-            >{{ item.content }}</span
+            @click="updateItem(item)"
+            class="text-left flex-1 cursor-pointer"
           >
+            <span class="ml-4">{{ item.content }}</span>
+          </div>
           <input
             v-else
             v-model="item.content"
-            v-click-away="clickAwayItem"
-            @keyup.enter="onEnterItem"
+            v-click-away="clickAwayUpdateItem"
+            @keyup.enter="onEnterUpdateItem"
             :ref="
               (element) => {
                 item.input = element;
               }
             "
             type="text"
-            placeholder="Type here"
-            class="input input-sm w-full max-w-xs ml-4"
+            placeholder="Type here to update item"
+            class="input input-sm w-full max-w-xs mx-4"
           />
+          <button
+            class="btn btn-sm btn-circle btn-warning btn-outline opacity-25 hover:opacity-100"
+            @click="deleteItem(item)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
       </div>
-            <div class="form-control pt-4">
+      <div v-if="errors.length > 0">
+        <div v-for="(error, key) in errors" :key="key" class="alert alert-error shadow-lg text-left mt-4">
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="stroke-current flex-shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{{ error }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-control pt-4">
         <input
           type="text"
           placeholder="✍️ Add a todo item"
