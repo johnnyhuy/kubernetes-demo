@@ -13,6 +13,14 @@ defineProps<{ msg: string }>();
 
 let errors: Ref<string[]> = ref([])
 
+const error = (message: string) => {
+  if (errors.value.find(error => error === message)) {
+    return
+  }
+
+  errors.value.push(message)
+}
+
 // Temp
 const uid = () => {
   return (
@@ -46,6 +54,11 @@ const clearAllEditedItems = () => {
 const onEnterAddItem = (payload: KeyboardEvent) => {
   const target = payload.target as HTMLInputElement;
 
+  if (target.value === '') {
+    error('Todo item cannot be nothing')
+    return
+  }
+
   items.value.push({
     id: uid(),
     checked: false,
@@ -56,7 +69,11 @@ const onEnterAddItem = (payload: KeyboardEvent) => {
   target.value = "";
 };
 
-const onEnterUpdateItem = () => {
+const onEnterUpdateItem = (item: Todo) => {
+  if (item.content === '') {
+    error('Updated todo item cannot be nothing')
+    return
+  }
   clearAllEditedItems();
 };
 
@@ -103,7 +120,7 @@ const deleteItem = (item: Todo) => {
             v-else
             v-model="item.content"
             v-click-away="clickAwayUpdateItem"
-            @keyup.enter="onEnterUpdateItem"
+            @keyup.enter="onEnterUpdateItem(item)"
             :ref="
               (element) => {
                 item.input = element;
