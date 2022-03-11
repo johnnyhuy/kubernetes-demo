@@ -10,17 +10,6 @@ profiles:
       tagPolicy:
         sha256: {}
       artifacts:
-        - image: johnnyhuy/todo-backend
-          context: apps/todo-backend
-          docker:
-            cliFlags: 
-              - --platform
-              - linux/amd64
-          sync:
-            manual:
-              - src: apps/todo-backend/src/*
-                dest: .
-
         - image: johnnyhuy/todo-frontend
           context: apps/todo-frontend
           docker:
@@ -38,6 +27,17 @@ profiles:
               - src: apps/todo-frontend/tailwind.config.js
                 dest: .
               - src: apps/todo-frontend/postcss.config.js
+                dest: .
+
+        - image: johnnyhuy/todo-backend
+          context: apps/todo-backend
+          docker:
+            cliFlags: 
+              - --platform
+              - linux/amd64
+          sync:
+            manual:
+              - src: apps/todo-backend/src/*
                 dest: .
     deploy:
       helm:

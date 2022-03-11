@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: todo-frontend
-          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          image: johnnyhuy/todo-frontend:latest
           pullPolicy: IfNotPresent
           ports:
             - name: http
@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          image: johnnyhuy/todo-frontend:latest
           pullPolicy: IfNotPresent
           ports:
             - name: http

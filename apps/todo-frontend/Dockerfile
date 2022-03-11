@@ -6,4 +6,4 @@ COPY package* ./
 RUN yarn
 COPY . .
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "yarn", "dev" ]
