@@ -31,8 +31,8 @@ profiles:
                 command: ["sh", "-c", "./bin/helm-repo-add.sh"]
                 os: [darwin, linux]
         releases:
-          - name: kube-apps
-            chartPath: charts/kube-apps
+          - name: todo
+            chartPath: charts/todo
             wait: true
             createNamespace: true
-            namespace: kube-apps
+            namespace: todo

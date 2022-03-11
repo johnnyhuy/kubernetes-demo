@@ -1,9 +1,0 @@
-external-dns:
-  enabled: false
-  nameOverride: ~
-  fullnameOverride: external-dns
-
-cert-manager:
-  enabled: false
-  nameOverride: ~
-  fullnameOverride: cert-manager
