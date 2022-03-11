@@ -15,7 +15,7 @@ spec:
       containers:
         - name: todo-frontend
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
-          pullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 3000
@@ -47,16 +47,8 @@ spec:
       containers:
         - name: todo-backend
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
-          pullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 3001
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http

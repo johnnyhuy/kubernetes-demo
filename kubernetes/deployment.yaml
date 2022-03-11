@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: todo-frontend
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       kubernetes.io/name: todo-frontend
@@ -15,7 +15,7 @@ spec:
       containers:
         - name: todo-frontend
           image: johnnyhuy/todo-frontend:latest
-          pullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 3000
@@ -35,7 +35,7 @@ kind: Deployment
 metadata:
   name: todo-backend
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       kubernetes.io/name: todo-backend
@@ -46,8 +46,8 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: johnnyhuy/todo-frontend:latest
-          pullPolicy: IfNotPresent
+          image: johnnyhuy/todo-backend:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 3001

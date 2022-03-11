@@ -40,15 +40,30 @@ profiles:
               - src: apps/todo-backend/src/*
                 dest: .
     deploy:
-      helm:
-        hooks:
-          before:
-            - host:
-                command: ["sh", "-c", "./bin/helm-repo-add.sh"]
-                os: [darwin, linux]
-        releases:
-          - name: todo
-            chartPath: charts/todo
-            wait: true
-            createNamespace: true
-            namespace: todo
+      kubectl:
+        manifests:
+          - kubernetes/*
+      # Option 2: Helm
+      # helm:
+      #   hooks:
+      #     before:
+      #       - host:
+      #           command: ["sh", "-c", "./bin/helm-repo-add.sh"]
+      #           os: [darwin, linux]
+      #   releases:
+      #     - name: todo
+      #       chartPath: charts/todo
+      #       wait: true
+      #       createNamespace: true
+      #       namespace: default
+
+    portForward:
+      - resourceType: service
+        resourceName: todo-frontend
+        namespace: default
+        port: 3000
+
+      - resourceType: service
+        resourceName: todo-backend
+        namespace: default
+        port: 3001
