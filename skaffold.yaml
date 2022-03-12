@@ -35,7 +35,7 @@ profiles:
               - linux/amd64
           sync:
             manual:
-              - src: 'src/*'
+              - src: 'src/**/*'
                 dest: .
     deploy:
       kubectl:
