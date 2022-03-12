@@ -8,9 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    // MongooseModule.forRoot(
-    //   `mongodb://${env.MONGODB_HOST}/${env.MONGODB_DATABASE}`,
-    // ),
+    MongooseModule.forRoot(`mongodb://${env.MONGODB_HOST}`),
   ],
   controllers: [AppController],
   providers: [AppService],
