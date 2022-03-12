@@ -74,6 +74,7 @@ const onEnterUpdateItem = (item: Todo) => {
     error('Updated todo item cannot be nothing')
     return
   }
+
   clearAllEditedItems();
 };
 

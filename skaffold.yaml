@@ -18,15 +18,13 @@ profiles:
               - linux/amd64
           sync:
             manual:
-              - src: apps/todo-frontend/src/*
+              - src: 'src/**/*'
                 dest: .
-              - src: apps/todo-frontend/public/*
+              - src: 'public/**/*'
                 dest: .
-              - src: apps/todo-frontend/index.html
+              - src: '*.html'
                 dest: .
-              - src: apps/todo-frontend/tailwind.config.js
-                dest: .
-              - src: apps/todo-frontend/postcss.config.js
+              - src: '*.js'
                 dest: .
 
         - image: johnnyhuy/todo-backend
@@ -37,7 +35,7 @@ profiles:
               - linux/amd64
           sync:
             manual:
-              - src: apps/todo-backend/src/*
+              - src: 'src/*'
                 dest: .
     deploy:
       kubectl:
