@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateTodoDto, UpdateTodoDto } from './todo.dto';
 import { Todo, TodoDocument } from './todo.schema';
 import { Model } from 'mongoose';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class TodoService {
@@ -21,6 +22,7 @@ export class TodoService {
   async create(createTodoDto: CreateTodoDto): Promise<Todo> {
     return await new this.model({
       ...createTodoDto,
+      id: v4(),
       checked: false,
       createdAt: new Date(),
     }).save();
