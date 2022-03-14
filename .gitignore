@@ -4,5 +4,4 @@ output*
 *.pem
 *.crt
 .idea/
-target
 node_modules

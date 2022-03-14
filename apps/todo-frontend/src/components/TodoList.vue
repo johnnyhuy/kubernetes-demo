@@ -11,15 +11,15 @@ interface Todo {
 
 defineProps<{ msg: string }>();
 
-let errors: Ref<string[]> = ref([])
+let errors: Ref<string[]> = ref([]);
 
 const error = (message: string) => {
-  if (errors.value.find(error => error === message)) {
-    return
+  if (errors.value.find((error) => error === message)) {
+    return;
   }
 
-  errors.value.push(message)
-}
+  errors.value.push(message);
+};
 
 // Temp
 const uid = () => {
@@ -30,20 +30,10 @@ const uid = () => {
   );
 };
 
-const items: Ref<Todo[]> = ref([
-  {
-    id: uid(),
-    checked: false,
-    edit: false,
-    content: "🚨 Item 1",
-  },
-  {
-    id: uid(),
-    checked: false,
-    edit: false,
-    content: "👺 Item 2",
-  },
-]);
+const fetchItems = await fetch(
+  `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`
+);
+const items: Ref<Todo[]> = ref(fetchItems.json());
 
 const clearAllEditedItems = () => {
   for (const item of items.value) {
@@ -54,9 +44,9 @@ const clearAllEditedItems = () => {
 const onEnterAddItem = (payload: KeyboardEvent) => {
   const target = payload.target as HTMLInputElement;
 
-  if (target.value === '') {
-    error('Todo item cannot be nothing')
-    return
+  if (target.value === "") {
+    error("Todo item cannot be nothing");
+    return;
   }
 
   items.value.push({
@@ -70,9 +60,9 @@ const onEnterAddItem = (payload: KeyboardEvent) => {
 };
 
 const onEnterUpdateItem = (item: Todo) => {
-  if (item.content === '') {
-    error('Updated todo item cannot be nothing')
-    return
+  if (item.content === "") {
+    error("Updated todo item cannot be nothing");
+    return;
   }
 
   clearAllEditedItems();
@@ -153,7 +143,11 @@ const deleteItem = (item: Todo) => {
         </div>
       </div>
       <div v-if="errors.length > 0">
-        <div v-for="(error, key) in errors" :key="key" class="alert alert-error shadow-lg text-left mt-4">
+        <div
+          v-for="(error, key) in errors"
+          :key="key"
+          class="alert alert-error shadow-lg text-left mt-4"
+        >
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"

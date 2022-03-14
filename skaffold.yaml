@@ -26,6 +26,8 @@ profiles:
                 dest: .
               - src: '*.js'
                 dest: .
+              - src: '*.ts'
+                dest: .
 
         - image: johnnyhuy/todo-backend
           context: apps/todo-backend

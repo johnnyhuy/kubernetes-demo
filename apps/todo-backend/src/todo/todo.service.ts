@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateTodoDto, UpdateTodoDto } from './todo.dto';
 import { Todo, TodoDocument } from './todo.schema';

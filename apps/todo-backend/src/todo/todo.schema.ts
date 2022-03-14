@@ -9,9 +9,6 @@ export class Todo {
   id: string;
 
   @Prop({ required: true })
-  checked: boolean;
-
-  @Prop({ required: true })
   content: string;
 
   @Prop({ required: true })
