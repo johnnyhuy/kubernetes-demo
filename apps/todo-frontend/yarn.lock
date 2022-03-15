@@ -243,6 +243,27 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.31.tgz#c90de7126d833dcd3a4c7534d534be2fb41faa4e"
   integrity sha512-ymN2pj6zEjiKJZbrf98UM2pfDd6F2H7ksKw7NDt/ZZ1fh5Ei39X5tABugtT03ZRlWd9imccoK0hE8hpjpU7irQ==
 
+"@vueuse/core@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-8.0.1.tgz#113e3704ce1e11ea204cc3586edb255753260f0c"
+  integrity sha512-LQ5pyxALWMZikNWzW2CTs/RfTyT0O3oYDl7jJhfckY0q/dLe2SCy5vX4+f6c2LFjG9M+sXRugne+W4t1I/wXUA==
+  dependencies:
+    "@vueuse/metadata" "8.0.1"
+    "@vueuse/shared" "8.0.1"
+    vue-demi "*"
+
+"@vueuse/metadata@8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-8.0.1.tgz#672b987619d6dc161501b06cada0798c90b827a1"
+  integrity sha512-+Y2TSsgliQMzqcRMcuX28XHrxojrZYGiBKzW05/mkPmlYGlUSOauF9pvyyslH0V4HfzCsg3CDKJhCnBLWKqN0w==
+
+"@vueuse/shared@8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-8.0.1.tgz#1ca157241b4e702dac63e0786ce459a865658ed8"
+  integrity sha512-PZf84+DHWUnIKNhvIxL335uWjjfIeEhYjRFilDqEWB/t4yHfNbZxDpT+4OgiLtgdCcGG1JKryNI7nkY9TyEu6w==
+  dependencies:
+    vue-demi "*"
+
 acorn-node@^1.6.1:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/acorn-node/-/acorn-node-1.8.2.tgz#114c95d64539e53dede23de8b9d96df7c7ae2af8"
@@ -1500,6 +1521,11 @@ vscode-vue-languageservice@0.29.8:
     vscode-languageserver-textdocument "^1.0.1"
     vscode-pug-languageservice "0.29.8"
     vscode-typescript-languageservice "0.29.8"
+
+vue-demi@*:
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.12.3.tgz#d1b368e0a4955593b63678457a9a456ec21884e2"
+  integrity sha512-u1dV2Y7nxUCHJC0+KZG7YgqjOgDgd8GS0rHp2YTiXy6rBPaYvEraoXkndU3UrExMLoN8SOnCWkDB27yu0BxGtg==
 
 vue-tsc@^0.29.8:
   version "0.29.8"

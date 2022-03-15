@@ -1,19 +1,13 @@
 <script setup lang="ts">
-import { nextTick, reactive, Ref, ref } from "vue";
+import { nextTick, Ref, ref } from "vue";
+import { useFetch } from '@vueuse/core'
+import { Todo } from "../todo";
 
-interface Todo {
-  id: string;
-  checked: boolean;
-  edit: boolean;
-  content: string;
-  input?: any;
-}
-
-defineProps<{ msg: string }>();
+const props = defineProps<{ todos: Todo[] | null }>();
 
 let errors: Ref<string[]> = ref([]);
 
-const error = (message: string) => {
+const showError = (message: string) => {
   if (errors.value.find((error) => error === message)) {
     return;
   }
@@ -21,22 +15,12 @@ const error = (message: string) => {
   errors.value.push(message);
 };
 
-// Temp
-const uid = () => {
-  return (
-    String.fromCharCode(Math.floor(Math.random() * 26) + 97) +
-    Math.random().toString(16).slice(2) +
-    Date.now().toString(16).slice(4)
-  );
-};
+const clearAllEditedTodos = () => {
+  if (props.todos === null) {
+    return
+  }
 
-const fetchItems = await fetch(
-  `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`
-);
-const items: Ref<Todo[]> = ref(fetchItems.json());
-
-const clearAllEditedItems = () => {
-  for (const item of items.value) {
+  for (const item of props.todos) {
     item.edit = false;
   }
 };
@@ -45,31 +29,29 @@ const onEnterAddItem = (payload: KeyboardEvent) => {
   const target = payload.target as HTMLInputElement;
 
   if (target.value === "") {
-    error("Todo item cannot be nothing");
+    showError("Todo item cannot be nothing");
     return;
   }
 
-  items.value.push({
-    id: uid(),
-    checked: false,
-    edit: false,
-    content: target.value,
-  });
+  // todos.value.push({
+  //   edit: false,
+  //   content: target.value,
+  // });
 
   target.value = "";
 };
 
 const onEnterUpdateItem = (item: Todo) => {
   if (item.content === "") {
-    error("Updated todo item cannot be nothing");
+    showError("Updated todo item cannot be nothing");
     return;
   }
 
-  clearAllEditedItems();
+  clearAllEditedTodos();
 };
 
 const clickAwayUpdateItem = () => {
-  clearAllEditedItems();
+  clearAllEditedTodos();
 };
 
 const updateItem = (todo: Todo) => {
@@ -80,7 +62,7 @@ const updateItem = (todo: Todo) => {
 };
 
 const deleteItem = (item: Todo) => {
-  items.value = items.value.filter((filterItem) => filterItem.id !== item.id);
+  todos = todos.filter((filterItem) => filterItem.id !== item.id);
 };
 </script>
 
@@ -89,13 +71,14 @@ const deleteItem = (item: Todo) => {
     <div class="card-body">
       <div class="form-control">
         <div
-          v-for="(item, key) in items"
+          v-for="(item, key) in todos"
           :key="key"
           class="flex justify-start select-none items-center px-1 py-2"
         >
           <label class="flex cursor-pointer items-center">
             <input
-              v-model="item.checked"
+              :checked="!!item.completedAt"
+              @input="item.completedAt = new Date()"
               type="checkbox"
               class="checkbox checkbox-primary checkbox-lg"
             />
