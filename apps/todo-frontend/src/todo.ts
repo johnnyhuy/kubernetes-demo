@@ -1,7 +1,14 @@
 export interface Todo {
+  /**
+   * Data
+   */
   id: string;
-  edit?: boolean;
   content: string;
   completedAt?: Date;
+
+  /**
+   * User interface
+   */
+  edit?: boolean;
   input?: any;
 }

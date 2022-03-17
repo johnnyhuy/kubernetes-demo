@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { nextTick, Ref, ref } from "vue";
-import { useFetch } from '@vueuse/core'
+import { nextTick, onMounted, reactive, Ref, ref } from "vue";
+import { useFetch, onClickOutside } from "@vueuse/core";
 import { Todo } from "../todo";
 
-const props = defineProps<{ todos: Todo[] | null }>();
+const todos = ref<Todo[]>([]);
+
+const fetchTodos = async () => {
+  const getTodos = await fetch(
+    `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`
+  );
+
+  todos.value = (await getTodos.json()) as Todo[];
+};
 
 let errors: Ref<string[]> = ref([]);
 
-const showError = (message: string) => {
+const showError = (message: any) => {
   if (errors.value.find((error) => error === message)) {
     return;
   }
@@ -16,54 +24,91 @@ const showError = (message: string) => {
 };
 
 const clearAllEditedTodos = () => {
-  if (props.todos === null) {
-    return
-  }
-
-  for (const item of props.todos) {
-    item.edit = false;
-  }
-};
-
-const onEnterAddItem = (payload: KeyboardEvent) => {
-  const target = payload.target as HTMLInputElement;
-
-  if (target.value === "") {
-    showError("Todo item cannot be nothing");
+  if (todos.value === null) {
     return;
   }
 
-  // todos.value.push({
-  //   edit: false,
-  //   content: target.value,
-  // });
+  for (const todo of todos.value) {
+    todo.edit = false;
+  }
+};
+
+const onEnterAddTodo = async (payload: KeyboardEvent) => {
+  const target = payload.target as HTMLInputElement;
+  errors.value = [];
+
+  if (target.value === "") {
+    showError("Todo todo cannot be nothing");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: target.value }),
+      }
+    );
+
+    if (!response.ok) throw response.statusText;
+
+    await fetchTodos();
+  } catch (error) {
+    showError(error);
+    console.error(error);
+  }
 
   target.value = "";
 };
 
-const onEnterUpdateItem = (item: Todo) => {
-  if (item.content === "") {
-    showError("Updated todo item cannot be nothing");
+const onEnterUpdateTodo = (todo: Todo) => {
+  if (todo.content === "") {
+    showError("Updated todo cannot be nothing");
     return;
   }
 
   clearAllEditedTodos();
+  errors.value = [];
 };
 
-const clickAwayUpdateItem = () => {
-  clearAllEditedTodos();
+const handleEditTodoInput = (element: any, todo: Todo) => {
+  todo.input = element;
+  onClickOutside(element, () => (todo.edit = false));
 };
 
-const updateItem = (todo: Todo) => {
+const updateTodo = (todo: Todo) => {
   todo.edit = true;
   nextTick(() => {
     todo.input?.focus();
+    todo.input?.select();
   });
 };
 
-const deleteItem = (item: Todo) => {
-  todos = todos.filter((filterItem) => filterItem.id !== item.id);
+const deleteTodo = async (todo: Todo) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_TODO_BACKEND_URL}/todos/${todo.id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) throw response.statusText;
+
+    await fetchTodos();
+  } catch (error) {
+    console.error(error);
+  }
 };
+
+onMounted(async () => {
+  await fetchTodos();
+});
 </script>
 
 <template>
@@ -71,42 +116,37 @@ const deleteItem = (item: Todo) => {
     <div class="card-body">
       <div class="form-control">
         <div
-          v-for="(item, key) in todos"
+          v-for="(todo, key) in todos"
           :key="key"
-          class="flex justify-start select-none items-center px-1 py-2"
+          class="flex justify-start select-none todos-center px-1 py-2"
         >
-          <label class="flex cursor-pointer items-center">
+          <label class="flex cursor-pointer todos-center">
             <input
-              :checked="!!item.completedAt"
-              @input="item.completedAt = new Date()"
+              :checked="!!todo.completedAt"
+              @input="todo.completedAt = new Date()"
               type="checkbox"
               class="checkbox checkbox-primary checkbox-lg"
             />
           </label>
           <div
-            v-if="!item.edit"
-            @click="updateItem(item)"
-            class="text-left flex-1 cursor-pointer"
+            v-show="!todo.edit"
+            @click="updateTodo(todo)"
+            class="flex items-center text-left flex-1 cursor-pointer ml-4"
           >
-            <span class="ml-4">{{ item.content }}</span>
+            {{ todo.content }}
           </div>
           <input
-            v-else
-            v-model="item.content"
-            v-click-away="clickAwayUpdateItem"
-            @keyup.enter="onEnterUpdateItem(item)"
-            :ref="
-              (element) => {
-                item.input = element;
-              }
-            "
+            v-show="todo.edit"
+            v-model="todo.content"
+            :ref="(element) => handleEditTodoInput(element, todo)"
+            @keyup.enter="onEnterUpdateTodo(todo)"
             type="text"
-            placeholder="Type here to update item"
+            placeholder="Type here to update todo"
             class="input input-sm w-full max-w-xs mx-4"
           />
           <button
             class="btn btn-sm btn-circle btn-warning btn-outline opacity-25 hover:opacity-100"
-            @click="deleteItem(item)"
+            @click="deleteTodo(todo)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -152,8 +192,8 @@ const deleteItem = (item: Todo) => {
       <div class="form-control pt-4">
         <input
           type="text"
-          placeholder="✍️ Add a todo item"
-          @keyup.enter="onEnterAddItem"
+          placeholder="✍️ Add a todo todo"
+          @keyup.enter="onEnterAddTodo"
           class="input input-sm w-full max-w-xs"
         />
       </div>

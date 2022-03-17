@@ -23,7 +23,6 @@ export class TodoService {
     return await new this.model({
       ...createTodoDto,
       id: v4(),
-      checked: false,
       createdAt: new Date(),
     }).save();
   }
@@ -32,7 +31,7 @@ export class TodoService {
     return await this.model.findByIdAndUpdate(id, updateTodoDto).exec();
   }
 
-  async delete(id: string): Promise<Todo> {
-    return await this.model.findByIdAndDelete(id).exec();
+  async delete(id: string) {
+    return await this.model.deleteOne({ id: id }).exec();
   }
 }
