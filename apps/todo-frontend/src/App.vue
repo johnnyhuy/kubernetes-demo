@@ -3,7 +3,7 @@ import TodoList from './components/TodoList.vue'
 </script>
 
 <template>
-  <div class="w-96 mx-auto">
+  <div class="w-1/2 mx-auto">
     <h2 class="text-4xl font-bold mb-4">📝 Todo</h2>
     <p class="mb-4 italic">Let's start the day with a todo</p>
     <TodoList class="mb-8" />
@@ -13,11 +13,9 @@ import TodoList from './components/TodoList.vue'
 
 <style lang="postcss">
 #app {
+  @apply mt-24;
+
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
