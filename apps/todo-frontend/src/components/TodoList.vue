@@ -1,22 +1,12 @@
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, Ref, ref } from "vue";
-import { useFetch, onClickOutside } from "@vueuse/core";
+import { nextTick, onMounted, Ref, ref } from "vue";
+import { onClickOutside } from "@vueuse/core";
 import { Todo } from "../todo";
 import Loading from "./Loading.vue";
 
 const todos = ref<Todo[]>([]);
 const errors: Ref<string[]> = ref([]);
-const isLoading = ref(true)
-
-const fetchTodos = async () => {
-  const getTodos = await fetch(
-    `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`
-  );
-
-  isLoading.value = false
-
-  todos.value = (await getTodos.json()) as Todo[];
-};
+const isLoadingTodos = ref(true);
 
 const showError = (message: any) => {
   if (errors.value.find((error) => error === message)) {
@@ -26,25 +16,17 @@ const showError = (message: any) => {
   errors.value.push(message);
 };
 
-const clearAllEditedTodos = () => {
-  if (todos.value === null) {
-    return;
-  }
+const getAllTodos = async () => {
+  const getTodos = await fetch(
+    `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`
+  );
 
-  for (const todo of todos.value) {
-    todo.edit = false;
-  }
+  isLoadingTodos.value = false;
+
+  todos.value = (await getTodos.json()) as Todo[];
 };
 
-const onEnterAddTodo = async (payload: KeyboardEvent) => {
-  const target = payload.target as HTMLInputElement;
-  errors.value = [];
-
-  if (target.value === "") {
-    showError("Todo todo cannot be nothing");
-    return;
-  }
-
+const createTodo = async (todo: Todo) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`,
@@ -54,42 +36,15 @@ const onEnterAddTodo = async (payload: KeyboardEvent) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ content: target.value }),
+        body: JSON.stringify(todo),
       }
     );
 
     if (!response.ok) throw response.statusText;
-
-    await fetchTodos();
   } catch (error) {
     showError(error);
     console.error(error);
   }
-
-  target.value = "";
-};
-
-const onEnterUpdateTodo = (todo: Todo) => {
-  if (todo.content === "") {
-    showError("Updated todo cannot be nothing");
-    return;
-  }
-
-  clearAllEditedTodos();
-  errors.value = [];
-};
-
-const handleEditTodoInput = (element: any, todo: Todo) => {
-  todo.input = element;
-  onClickOutside(element, () => (todo.edit = false));
-};
-
-const updateTodo = (todo: Todo) => {
-  todo.edit = true;
-  nextTick(() => {
-    todo.input?.focus();
-    todo.input?.select();
-  });
 };
 
 const deleteTodo = async (todo: Todo) => {
@@ -103,21 +58,78 @@ const deleteTodo = async (todo: Todo) => {
 
     if (!response.ok) throw response.statusText;
 
-    await fetchTodos();
+    
   } catch (error) {
     console.error(error);
   }
 };
 
+const clearEditTodos = () => {
+  if (todos.value === null) {
+    return;
+  }
+
+  for (const todo of todos.value) {
+    todo.edit = false;
+  }
+};
+
+const handleEnterCreateTodo = async (payload: KeyboardEvent) => {
+  const target = payload.target as HTMLInputElement;
+  errors.value = [];
+
+  if (target.value === "") {
+    showError("Todo todo cannot be nothing");
+    return;
+  }
+
+  await createTodo({ content: target.value });
+  await getAllTodos();
+
+  target.value = "";
+};
+
+const handleEnterUpdateTodo = (todo: Todo) => {
+  if (todo.content === "") {
+    showError("Updated todo cannot be nothing");
+    return;
+  }
+
+  clearEditTodos();
+  errors.value = [];
+};
+
+const handleClickOutsideEditTodo = (todo: Todo) => {
+  todo.edit = false;
+};
+
+const handleEditTodoInput = (element: any, todo: Todo) => {
+  todo.input = element;
+  onClickOutside(element, () => handleClickOutsideEditTodo(todo));
+};
+
+const handleUpdateTodo = (todo: Todo) => {
+  todo.edit = true;
+  nextTick(() => {
+    todo.input?.focus();
+    todo.input?.select();
+  });
+};
+
+const handleDeleteTodo = async (todo: Todo) => {
+  await deleteTodo(todo)
+  await getAllTodos();
+};
+
 onMounted(async () => {
-  await fetchTodos();
+  await getAllTodos();
 });
 </script>
 
 <template>
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
-      <div v-if="!isLoading" class="form-control">
+      <div v-if="!isLoadingTodos" class="form-control">
         <div
           v-for="(todo, key) in todos"
           :key="key"
@@ -133,7 +145,7 @@ onMounted(async () => {
           </label>
           <div
             v-show="!todo.edit"
-            @click="updateTodo(todo)"
+            @click="handleUpdateTodo(todo)"
             class="flex items-center text-left flex-1 cursor-pointer ml-4"
           >
             {{ todo.content }}
@@ -142,14 +154,14 @@ onMounted(async () => {
             v-show="todo.edit"
             v-model="todo.content"
             :ref="(element) => handleEditTodoInput(element, todo)"
-            @keyup.enter="onEnterUpdateTodo(todo)"
+            @keyup.enter="handleEnterUpdateTodo(todo)"
             type="text"
             placeholder="Type here to update todo"
-            class="input input-sm w-full max-w-xs mx-4"
+            class="input input-sm w-full mx-4"
           />
           <button
             class="btn btn-sm btn-circle btn-warning btn-outline opacity-25 hover:opacity-100"
-            @click="deleteTodo(todo)"
+            @click="handleDeleteTodo(todo)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -197,8 +209,8 @@ onMounted(async () => {
         <input
           type="text"
           placeholder="✍️ Add a todo"
-          @keyup.enter="onEnterAddTodo"
-          class="input input-sm w-full max-w-xs"
+          @keyup.enter="handleEnterCreateTodo"
+          class="input input-sm w-full"
         />
       </div>
     </div>
