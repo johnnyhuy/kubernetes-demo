@@ -40,9 +40,18 @@ profiles:
               - src: 'src/**/*'
                 dest: .
     deploy:
-      kubectl:
-        manifests:
-          - kubernetes/*
+      helm:
+        hooks:
+          before:
+            - host:
+                command: ["sh", "-c", "./bin/helm-repo-add.sh"]
+                os: [darwin, linux]
+        releases:
+          - name: todo
+            chartPath: charts/todo
+            wait: true
+            createNamespace: true
+            namespace: default
 
     portForward:
       - resourceType: service
