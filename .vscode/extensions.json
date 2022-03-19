@@ -1,3 +1,13 @@
 {
-  "recommendations": ["johnsoncodehk.volar"]
+  "recommendations": [
+    "johnsoncodehk.volar",
+    "cpylua.language-postcss",
+    "orta.vscode-jest",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "esbenp.prettier-vscode",
+    "tim-koehler.helm-intellisense",
+    "mikestead.dotenv",
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint"
+  ]
 }
