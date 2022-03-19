@@ -37,7 +37,7 @@ const createTodo = async (todo: Todo) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          content: todo.content
+          content: todo.content,
         }),
       }
     );
@@ -61,7 +61,7 @@ const updateTodo = async (todo: Todo) => {
         },
         body: JSON.stringify({
           content: todo.content,
-          completedAt: todo.completedAt
+          completedAt: todo.completedAt,
         }),
       }
     );
@@ -83,8 +83,6 @@ const deleteTodo = async (todo: Todo) => {
     );
 
     if (!response.ok) throw response.statusText;
-
-    
   } catch (error) {
     console.error(error);
   }
@@ -115,18 +113,26 @@ const handleEnterCreateTodo = async (payload: KeyboardEvent) => {
   target.value = "";
 };
 
-const handleEnterTodo = (todo: Todo) => {
+const handleEnterUpdateTodo = async (todo: Todo) => {
   if (todo.content === "") {
     showError("Updated todo cannot be nothing");
     return;
   }
 
+  await updateTodo(todo);
+
   clearEditTodos();
   errors.value = [];
 };
 
-const handleClickOutsideEditTodo = (todo: Todo) => {
+const handleClickOutsideEditTodo = async (todo: Todo) => {
+  if (!todo.edit) {
+    return
+  }
+
   todo.edit = false;
+  
+  await updateTodo(todo);
 };
 
 const refTodoInput = (element: any, todo: Todo) => {
@@ -147,7 +153,7 @@ const handleClickUpdateTodo = (todo: Todo) => {
 };
 
 const handleClickDeleteTodo = async (todo: Todo) => {
-  await deleteTodo(todo)
+  await deleteTodo(todo);
   await getAllTodos();
 };
 
@@ -155,13 +161,12 @@ const handleCheckedUpdateTodo = async (todo: Todo) => {
   const target = todo.checkbox as HTMLInputElement;
 
   if (target.checked) {
-    todo.completedAt = new Date()
+    todo.completedAt = new Date();
   } else {
-    todo.completedAt = null
+    todo.completedAt = null;
   }
 
-  await updateTodo(todo)
-  await getAllTodos();
+  await updateTodo(todo);
 };
 
 onMounted(async () => {
@@ -198,7 +203,7 @@ onMounted(async () => {
             v-show="todo.edit"
             v-model="todo.content"
             :ref="(element) => refTodoInput(element, todo)"
-            @keyup.enter="handleEnterTodo(todo)"
+            @keyup.enter="handleEnterUpdateTodo(todo)"
             type="text"
             placeholder="Type here to update todo"
             class="input input-sm w-full mx-4"
