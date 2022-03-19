@@ -2,18 +2,21 @@
 import { nextTick, onMounted, reactive, Ref, ref } from "vue";
 import { useFetch, onClickOutside } from "@vueuse/core";
 import { Todo } from "../todo";
+import Loading from "./Loading.vue";
 
 const todos = ref<Todo[]>([]);
+const errors: Ref<string[]> = ref([]);
+const isLoading = ref(true)
 
 const fetchTodos = async () => {
   const getTodos = await fetch(
     `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`
   );
 
+  isLoading.value = false
+
   todos.value = (await getTodos.json()) as Todo[];
 };
-
-let errors: Ref<string[]> = ref([]);
 
 const showError = (message: any) => {
   if (errors.value.find((error) => error === message)) {
@@ -114,7 +117,7 @@ onMounted(async () => {
 <template>
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
-      <div class="form-control">
+      <div v-if="!isLoading" class="form-control">
         <div
           v-for="(todo, key) in todos"
           :key="key"
@@ -165,6 +168,7 @@ onMounted(async () => {
           </button>
         </div>
       </div>
+      <Loading v-else class="mx-auto" />
       <div v-if="errors.length > 0">
         <div
           v-for="(error, key) in errors"
@@ -192,7 +196,7 @@ onMounted(async () => {
       <div class="form-control pt-4">
         <input
           type="text"
-          placeholder="✍️ Add a todo todo"
+          placeholder="✍️ Add a todo"
           @keyup.enter="onEnterAddTodo"
           class="input input-sm w-full max-w-xs"
         />

@@ -14,7 +14,7 @@
   height: 80px;
 }
 .lds-ellipsis div {
-  @apply bg-gray-900;
+  @apply bg-blue-500;
   position: absolute;
   top: 33px;
   width: 13px;
