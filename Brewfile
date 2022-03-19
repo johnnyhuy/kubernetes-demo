@@ -1,0 +1,5 @@
+brew "docker"
+brew "skaffold"
+brew "minikube"
+brew "helm"
+brew "nvm"
