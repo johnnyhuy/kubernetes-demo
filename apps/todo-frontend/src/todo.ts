@@ -2,13 +2,16 @@ export interface Todo {
   /**
    * Data
    */
-  id: string;
+  id?: string;
   content: string;
-  completedAt?: Date;
+  completedAt?: Date | null;
 
   /**
    * User interface
    */
+  // TODO: Move this into components instead of
+  // adding it to this interface
   edit?: boolean;
-  input?: any;
+  textInput?: any;
+  checkbox?: any;
 }

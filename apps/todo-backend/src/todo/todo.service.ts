@@ -27,8 +27,8 @@ export class TodoService {
     }).save();
   }
 
-  async update(id: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {
-    return await this.model.findByIdAndUpdate(id, updateTodoDto).exec();
+  async update(id: string, updateTodoDto: UpdateTodoDto) {
+    return await this.model.updateOne({ id: id }, updateTodoDto).exec();
   }
 
   async delete(id: string) {

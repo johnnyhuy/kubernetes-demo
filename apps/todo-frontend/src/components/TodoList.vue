@@ -36,7 +36,33 @@ const createTodo = async (todo: Todo) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(todo),
+        body: JSON.stringify({
+          content: todo.content
+        }),
+      }
+    );
+
+    if (!response.ok) throw response.statusText;
+  } catch (error) {
+    showError(error);
+    console.error(error);
+  }
+};
+
+const updateTodo = async (todo: Todo) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_TODO_BACKEND_URL}/todos/${todo.id}`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: todo.content,
+          completedAt: todo.completedAt
+        }),
       }
     );
 
@@ -89,7 +115,7 @@ const handleEnterCreateTodo = async (payload: KeyboardEvent) => {
   target.value = "";
 };
 
-const handleEnterUpdateTodo = (todo: Todo) => {
+const handleEnterTodo = (todo: Todo) => {
   if (todo.content === "") {
     showError("Updated todo cannot be nothing");
     return;
@@ -103,21 +129,38 @@ const handleClickOutsideEditTodo = (todo: Todo) => {
   todo.edit = false;
 };
 
-const handleEditTodoInput = (element: any, todo: Todo) => {
-  todo.input = element;
+const refTodoInput = (element: any, todo: Todo) => {
+  todo.textInput = element;
   onClickOutside(element, () => handleClickOutsideEditTodo(todo));
 };
 
-const handleUpdateTodo = (todo: Todo) => {
+const refTodoCheckbox = (element: any, todo: Todo) => {
+  todo.checkbox = element;
+};
+
+const handleClickUpdateTodo = (todo: Todo) => {
   todo.edit = true;
   nextTick(() => {
-    todo.input?.focus();
-    todo.input?.select();
+    todo.textInput?.focus();
+    todo.textInput?.select();
   });
 };
 
-const handleDeleteTodo = async (todo: Todo) => {
+const handleClickDeleteTodo = async (todo: Todo) => {
   await deleteTodo(todo)
+  await getAllTodos();
+};
+
+const handleCheckedUpdateTodo = async (todo: Todo) => {
+  const target = todo.checkbox as HTMLInputElement;
+
+  if (target.checked) {
+    todo.completedAt = new Date()
+  } else {
+    todo.completedAt = null
+  }
+
+  await updateTodo(todo)
   await getAllTodos();
 };
 
@@ -138,14 +181,15 @@ onMounted(async () => {
           <label class="flex cursor-pointer todos-center">
             <input
               :checked="!!todo.completedAt"
-              @input="todo.completedAt = new Date()"
+              :ref="(element) => refTodoCheckbox(element, todo)"
+              @input="handleCheckedUpdateTodo(todo)"
               type="checkbox"
               class="checkbox checkbox-primary checkbox-lg"
             />
           </label>
           <div
             v-show="!todo.edit"
-            @click="handleUpdateTodo(todo)"
+            @click="handleClickUpdateTodo(todo)"
             class="flex items-center text-left flex-1 cursor-pointer ml-4"
           >
             {{ todo.content }}
@@ -153,15 +197,15 @@ onMounted(async () => {
           <input
             v-show="todo.edit"
             v-model="todo.content"
-            :ref="(element) => handleEditTodoInput(element, todo)"
-            @keyup.enter="handleEnterUpdateTodo(todo)"
+            :ref="(element) => refTodoInput(element, todo)"
+            @keyup.enter="handleEnterTodo(todo)"
             type="text"
             placeholder="Type here to update todo"
             class="input input-sm w-full mx-4"
           />
           <button
             class="btn btn-sm btn-circle btn-warning btn-outline opacity-25 hover:opacity-100"
-            @click="handleDeleteTodo(todo)"
+            @click="handleClickDeleteTodo(todo)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
