@@ -1,0 +1,11 @@
+{
+  "name": "kubernetes-demo",
+  "private": true,
+  "repository": "git@github.com:johnnyhuy/todo-app-kubernetes.git",
+  "author": "Johnny Huynh <27847622+johnnyhuy@users.noreply.github.com>",
+  "license": "MIT",
+  "workspaces": [
+    "./apps/todo-frontend",
+    "./apps/todo-backend"
+  ]
+}

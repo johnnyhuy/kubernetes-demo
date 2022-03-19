@@ -1,0 +1,36 @@
+Arguments: 
+  /opt/homebrew/Cellar/node/17.4.0/bin/node /opt/homebrew/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js init
+
+PATH: 
+  /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/johnny/.meteor:/usr/local/opt/mysql-client/bin:/Users/johnny/.antigen/bundles/robbyrussell/oh-my-zsh/lib:/Users/johnny/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/git:/Users/johnny/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/command-not-found:/Users/johnny/.antigen/bundles/zsh-users/zsh-completions:/Users/johnny/.antigen/bundles/zsh-users/zsh-history-substring-search:/Users/johnny/.antigen/bundles/zsh-users/zsh-autosuggestions:/Users/johnny/.antigen/bundles/zsh-users/zsh-syntax-highlighting:/Users/johnny/.antigen/bundles/vkolagotla/zsh-random-quotes:/Users/johnny/.antigen/bundles/b4b4r07/enhancd:/Users/johnny/.antigen/bundles/b4b4r07/enhancd/functions:/Users/johnny/.antigen/bundles/denysdovhan/spaceship-prompt
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  17.4.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/opt/homebrew/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:137143:13)
+      at Interface.emit (node:events:520:28)
+      at Interface.[_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:973:18)
+      at ReadStream.onkeypress (node:internal/readline/interface:240:20)
+      at ReadStream.emit (node:events:520:28)
+      at emitKeys (node:internal/readline/utils:358:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+      at ReadStream.emit (node:events:520:28)
+      at addChunk (node:internal/streams/readable:324:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
