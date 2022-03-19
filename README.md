@@ -8,7 +8,7 @@
     </a>
     <h3 align="center">Todo App Kubernetes</h3>
     <p align="center">
-    A demonstration of a todo application in a container orhestration environment.
+    A demonstration of a todo application in a container orchestration environment.
     <br />
     <br />
     <a href="#getting-started">Getting Started</a>
