@@ -3,7 +3,7 @@ import TodoList from './components/TodoList.vue'
 </script>
 
 <template>
-  <div class="w-1/2 mx-auto">
+  <div class="w-full sm:w-3/4 lg:w-1/2 xl:w-1/3 px-8 sm:mx-auto">
     <h2 class="text-4xl font-bold mb-4">📝 Todo</h2>
     <p class="mb-4 italic">Let's start the day with a todo</p>
     <TodoList class="mb-8" />
