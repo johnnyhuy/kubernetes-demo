@@ -13,16 +13,22 @@
     <br />
     <a href="#getting-started">Getting Started</a>
     ·
-    <a href="#deployment">Usage</a>
+    <a href="#monitoring">Monitoring</a>
     <br />
-    <a href="#deployment">Load testing</a>
+    <a href="#load-testing">Load testing</a>
     ·
-    <a href="#deployment">Chaos testing</a>
+    <a href="#chaos-testing">Chaos testing</a>
+    <br />
+    <a href="#acknowledgments">Acknowledgments</a>
 </div>
 
 ## Background
 
 ![Todo App][product-screenshot]
+
+This project was made to solve the problem of introducing new team members into Kubernetes. Demonstrating tool to host a microservices app in Kubernetes along with testing and monitoring capabilities.
+
+We're using Minikube as a baseline to deploy services into Kubernetes. However, this can be compatible with Managed Kubernetes Services give or take some modification to adapt to cloud providers.
 
 ### Built With
 
@@ -55,7 +61,7 @@ brew bundle
 
 > Work in progress - open to suggestions
 
-## Usage
+### Usage
 
 ```sh
 # Start local cluster
@@ -70,11 +76,21 @@ skaffold dev
 skaffold build -q | skaffold deploy --build-artifacts -
 ```
 
-## License
+## Monitoring
 
-Distributed under the MIT License. See [`LICENSE`](./LICENSE) for more information.
+> TODO
+
+## Load Testing
+
+> TODO
+
+## Chaos Testing
+
+> TODO
 
 ## Acknowledgments
+
+Distributed under the MIT License. See [`LICENSE`](./LICENSE) for more information.
 
 > TODO
 
