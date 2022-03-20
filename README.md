@@ -12,13 +12,15 @@
     <br />
     <br />
     <a href="#getting-started">Getting Started</a>
-    ·
-    <a href="#monitoring">Monitoring</a>
     <br />
+    <a href="#monitoring">Monitoring</a>
+    ·
     <a href="#load-testing">Load testing</a>
     ·
     <a href="#chaos-testing">Chaos testing</a>
     <br />
+    <a href="./FINDINGS.md">Findings</a>
+    ·
     <a href="#acknowledgments">Acknowledgments</a>
 </div>
 
@@ -87,6 +89,10 @@ skaffold build -q | skaffold deploy --build-artifacts -
 ## Chaos Testing
 
 > TODO
+
+## Findings
+
+Little tid bits can me found in [`FINDINGS.md`](./FINDINGS.md)
 
 ## Acknowledgments
 
