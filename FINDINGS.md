@@ -14,3 +14,14 @@ mongodb://root:root@localhost/my-database
 ## Don't need to use `useFetch` from VueUse
 
 We can just use vanilla JS to make HTTP requests with the Fetch API. This API also supports async await functions.
+
+## Docker builds failing due to out of space
+
+When building Docker images, commands like `yarn` can fail due to no space left on the Docker daemon. This is caused by running `skaffold dev` since it tries to sync files through volumes and rebuild images.
+
+By default, Docker for Desktop allocates 60 GB. We can either prune images & volumes (recommended) or extend the allocated space.
+
+```bash
+docker image prune -a -f
+docker volume prune -f
+```
