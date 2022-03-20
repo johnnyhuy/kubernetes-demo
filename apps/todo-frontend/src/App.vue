@@ -7,7 +7,12 @@ import TodoList from './components/TodoList.vue'
     <h2 class="text-4xl font-bold mb-4">📝 Todo</h2>
     <p class="mb-4 italic">Let's start the day with a todo</p>
     <TodoList class="mb-8" />
-    <p class="italic text-gray-400 text-sm">Brought to you by <a href="https://kubernetes.io" class="text-blue-500 hover:underline">Kubernetes</a></p>
+    <p class="italic text-gray-400 text-sm">
+      Brought to you by
+      <a href="https://kubernetes.io" class="text-blue-500 hover:underline"
+        >Kubernetes</a
+      >
+    </p>
   </div>
 </template>
 

@@ -1,177 +1,175 @@
 <script setup lang="ts">
-import { nextTick, onMounted, Ref, ref } from "vue";
-import { onClickOutside } from "@vueuse/core";
-import { Todo } from "../todo";
-import Loading from "./Loading.vue";
+import { nextTick, onMounted, Ref, ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
+import { Todo } from '../todo'
+import LoadingIcon from './LoadingIcon.vue'
 
-const todos = ref<Todo[]>([]);
-const errors: Ref<string[]> = ref([]);
-const isLoadingTodos = ref(true);
+const todos = ref<Todo[]>([])
+const errors: Ref<string[]> = ref([])
+const isLoadingTodos = ref(true)
 
 const showError = (message: any) => {
   if (errors.value.find((error) => error === message)) {
-    return;
+    return
   }
 
-  errors.value.push(message);
-};
+  errors.value.push(message)
+}
 
 const getAllTodos = async () => {
-  const getTodos = await fetch(
-    `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`
-  );
+  const getTodos = await fetch(`${import.meta.env.VITE_TODO_BACKEND_URL}/todos`)
 
-  isLoadingTodos.value = false;
+  isLoadingTodos.value = false
 
-  todos.value = (await getTodos.json()) as Todo[];
-};
+  todos.value = (await getTodos.json()) as Todo[]
+}
 
 const createTodo = async (todo: Todo) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_TODO_BACKEND_URL}/todos`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           content: todo.content,
         }),
       }
-    );
+    )
 
-    if (!response.ok) throw response.statusText;
+    if (!response.ok) throw response.statusText
   } catch (error) {
-    showError(error);
-    console.error(error);
+    showError(error)
+    console.error(error)
   }
-};
+}
 
 const updateTodo = async (todo: Todo) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_TODO_BACKEND_URL}/todos/${todo.id}`,
       {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           content: todo.content,
           completedAt: todo.completedAt,
         }),
       }
-    );
+    )
 
-    if (!response.ok) throw response.statusText;
+    if (!response.ok) throw response.statusText
   } catch (error) {
-    showError(error);
-    console.error(error);
+    showError(error)
+    console.error(error)
   }
-};
+}
 
 const deleteTodo = async (todo: Todo) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_TODO_BACKEND_URL}/todos/${todo.id}`,
       {
-        method: "DELETE",
+        method: 'DELETE',
       }
-    );
+    )
 
-    if (!response.ok) throw response.statusText;
+    if (!response.ok) throw response.statusText
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-};
+}
 
 const clearEditTodos = () => {
   if (todos.value === null) {
-    return;
+    return
   }
 
   for (const todo of todos.value) {
-    todo.edit = false;
+    todo.edit = false
   }
-};
+}
 
 const handleEnterCreateTodo = async (payload: KeyboardEvent) => {
-  const target = payload.target as HTMLInputElement;
-  errors.value = [];
+  const target = payload.target as HTMLInputElement
+  errors.value = []
 
-  if (target.value === "") {
-    showError("Todo todo cannot be nothing");
-    return;
+  if (target.value === '') {
+    showError('Todo todo cannot be nothing')
+    return
   }
 
-  await createTodo({ content: target.value });
-  await getAllTodos();
+  await createTodo({ content: target.value })
+  await getAllTodos()
 
-  target.value = "";
-};
+  target.value = ''
+}
 
 const handleEnterUpdateTodo = async (todo: Todo) => {
-  if (todo.content === "") {
-    showError("Updated todo cannot be nothing");
-    return;
+  if (todo.content === '') {
+    showError('Updated todo cannot be nothing')
+    return
   }
 
-  await updateTodo(todo);
+  await updateTodo(todo)
 
-  clearEditTodos();
-  errors.value = [];
-};
+  clearEditTodos()
+  errors.value = []
+}
 
 const handleClickOutsideEditTodo = async (todo: Todo) => {
   if (!todo.edit) {
     return
   }
 
-  todo.edit = false;
-  
-  await updateTodo(todo);
-};
+  todo.edit = false
+
+  await updateTodo(todo)
+}
 
 const refTodoInput = (element: any, todo: Todo) => {
-  todo.textInput = element;
-  onClickOutside(element, () => handleClickOutsideEditTodo(todo));
-};
+  todo.textInput = element
+  onClickOutside(element, () => handleClickOutsideEditTodo(todo))
+}
 
 const refTodoCheckbox = (element: any, todo: Todo) => {
-  todo.checkbox = element;
-};
+  todo.checkbox = element
+}
 
 const handleClickUpdateTodo = (todo: Todo) => {
-  todo.edit = true;
+  todo.edit = true
   nextTick(() => {
-    todo.textInput?.focus();
-    todo.textInput?.select();
-  });
-};
+    todo.textInput?.focus()
+    todo.textInput?.select()
+  })
+}
 
 const handleClickDeleteTodo = async (todo: Todo) => {
-  await deleteTodo(todo);
-  await getAllTodos();
-};
+  await deleteTodo(todo)
+  await getAllTodos()
+}
 
 const handleCheckedUpdateTodo = async (todo: Todo) => {
-  const target = todo.checkbox as HTMLInputElement;
+  const target = todo.checkbox as HTMLInputElement
 
   if (target.checked) {
-    todo.completedAt = new Date();
+    todo.completedAt = new Date()
   } else {
-    todo.completedAt = null;
+    todo.completedAt = null
   }
 
-  await updateTodo(todo);
-};
+  await updateTodo(todo)
+}
 
 onMounted(async () => {
-  await getAllTodos();
-});
+  await getAllTodos()
+})
 </script>
 
 <template>
@@ -229,7 +227,7 @@ onMounted(async () => {
           </button>
         </div>
       </div>
-      <Loading v-else class="mx-auto" />
+      <LoadingIcon v-else class="mx-auto" />
       <div v-if="errors.length > 0">
         <div
           v-for="(error, key) in errors"

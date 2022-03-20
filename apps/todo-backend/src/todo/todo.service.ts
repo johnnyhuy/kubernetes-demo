@@ -8,7 +8,7 @@ import { v4 } from 'uuid'
 @Injectable()
 export class TodoService {
   constructor(
-    @InjectModel(Todo.name) private readonly model: Model<TodoDocument>,
+    @InjectModel(Todo.name) private readonly model: Model<TodoDocument>
   ) {}
 
   async findAll(): Promise<Todo[]> {

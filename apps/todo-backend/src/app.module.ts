@@ -9,7 +9,7 @@ import { AppController } from './app.controller'
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(
-      `mongodb://${env.MONGODB_HOST}/todo?authSource=admin`,
+      `mongodb://${env.MONGODB_HOST}/todo?authSource=admin`
     ),
     TodoModule,
   ],
