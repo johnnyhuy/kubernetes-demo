@@ -1,14 +1,6 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import { CreateTodoDto, UpdateTodoDto } from './todo.dto';
-import { TodoService } from './todo.service';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { CreateTodoDto, UpdateTodoDto } from './todo.dto'
+import { TodoService } from './todo.service'
 
 @Controller('todos')
 export class TodoController {
@@ -16,26 +8,26 @@ export class TodoController {
 
   @Get()
   async index() {
-    return await this.service.findAll();
+    return await this.service.findAll()
   }
 
   @Get(':id')
   async find(@Param('id') id: string) {
-    return await this.service.findOne(id);
+    return await this.service.findOne(id)
   }
 
   @Post()
   async create(@Body() createTodoDto: CreateTodoDto) {
-    return await this.service.create(createTodoDto);
+    return await this.service.create(createTodoDto)
   }
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return await this.service.update(id, updateTodoDto);
+    return await this.service.update(id, updateTodoDto)
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return await this.service.delete(id);
+    return await this.service.delete(id)
   }
 }

@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { env } from 'process';
-import { ConfigModule } from '@nestjs/config';
-import { TodoModule } from './todo/todo.module';
-import { AppController } from './app.controller';
+import { Module } from '@nestjs/common'
+import { MongooseModule } from '@nestjs/mongoose'
+import { env } from 'process'
+import { ConfigModule } from '@nestjs/config'
+import { TodoModule } from './todo/todo.module'
+import { AppController } from './app.controller'
 
 @Module({
   imports: [
