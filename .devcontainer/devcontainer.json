@@ -21,6 +21,7 @@
 		"Tim-Koehler.helm-intellisense",
 		"ivangabriele.vscode-git-add-and-commit"
 	],
+	"postCreateCommand": "yarn",
 	"remoteUser": "node",
 	"features": {
 		"kubectl-helm-minikube": "1.22"
