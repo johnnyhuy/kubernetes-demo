@@ -13,9 +13,15 @@
 	"settings": {},
 	"extensions": [
 		"ms-azuretools.vscode-docker",
-		"ms-kubernetes-tools.vscode-kubernetes-tools"
+		"ms-kubernetes-tools.vscode-kubernetes-tools",
+		"dbaeumer.vscode-eslint",
+		"eamodio.gitlens",
+		"ms-vscode.vscode-typescript-next",
+		"Orta.vscode-jest",
+		"Tim-Koehler.helm-intellisense",
+		"ivangabriele.vscode-git-add-and-commit"
 	],
-	"remoteUser": "vscode",
+	"remoteUser": "node",
 	"features": {
 		"kubectl-helm-minikube": "1.22"
 	}
