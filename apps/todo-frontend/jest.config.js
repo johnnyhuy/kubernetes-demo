@@ -1,3 +1,5 @@
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  ...require('../../jest.config.js'),
-}
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+};

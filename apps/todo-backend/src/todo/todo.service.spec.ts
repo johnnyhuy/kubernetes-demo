@@ -2,7 +2,6 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { TodoModule } from './todo.module'
-import { Todo, TodoSchema } from './todo.schema'
 import { TodoService } from './todo.service'
 
 describe('TodoService', () => {
