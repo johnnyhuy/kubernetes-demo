@@ -1,20 +1,14 @@
-ARG VARIANT="16-bullseye"
-FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT}
+FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-16-bullseye
 
 # Enable new "BUILDKIT" mode for Docker CLI
 ENV DOCKER_BUILDKIT=1
 
 # Options
-ARG INSTALL_ZSH="true"
-ARG UPGRADE_PACKAGES="false"
 ARG USE_MOBY="true"
-ARG USERNAME=vscode
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
+ARG USERNAME=node
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
 COPY library-scripts/*.sh /tmp/library-scripts/
-RUN apt-get update && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true" \
-    && /bin/bash /tmp/library-scripts/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "${USERNAME}" "${USE_MOBY}" \
+RUN apt-get update && bin/bash /tmp/library-scripts/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "${USERNAME}" "${USE_MOBY}" \
     && /bin/bash /tmp/library-scripts/kubectl-helm-debian.sh "latest" "latest" "none" \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
 
