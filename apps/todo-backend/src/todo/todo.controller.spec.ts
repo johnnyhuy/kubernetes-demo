@@ -8,16 +8,16 @@ import { INestApplication } from '@nestjs/common'
 describe('Todos controller', () => {
   let app: INestApplication
   let fetch: FetchFunction
+  let mongod: MongoMemoryServer
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         MongooseModule.forRootAsync({
           useFactory: async () => {
-            const mongod = await MongoMemoryServer.create()
-            const uri = mongod.getUri()
+            mongod = await MongoMemoryServer.create()
             return {
-              uri: uri,
+              uri: mongod.getUri(),
             }
           },
         }),
@@ -31,6 +31,7 @@ describe('Todos controller', () => {
   })
 
   afterAll(async () => {
+    mongod.stop({ doCleanup: true })
     app.close()
   })
 
