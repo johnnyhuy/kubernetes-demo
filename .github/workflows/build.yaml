@@ -14,7 +14,7 @@ jobs:
     - name: Setup Kubernetes Tools
       uses: yokawasa/action-setup-kube-tools@c81bf94cddd6c3172e6f61aa7f5ad66a2b5db98d
       with:
-        skaffold: 1.36.1
+        skaffold: 1.37.1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
