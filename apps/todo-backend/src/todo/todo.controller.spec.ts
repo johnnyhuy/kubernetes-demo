@@ -1,45 +1,50 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { MongooseModule } from '@nestjs/mongoose'
-import { MongoMemoryServer } from 'mongodb-memory-server'
-import { TodoModule } from './todo.module'
-import { FetchFunction, makeFetch } from 'supertest-fetch'
-import { INestApplication } from '@nestjs/common'
+import { Test } from '@nestjs/testing'
+import { TodoService } from './todo.service'
+import { TodoController } from './todo.controller'
+import { Todo } from './todo.schema'
+import { getModelToken } from '@nestjs/mongoose'
 
 describe('Todos controller', () => {
-  let app: INestApplication
-  let fetch: FetchFunction
-  let mongod: MongoMemoryServer
+  let todoController: TodoController
+  let todoService: TodoService
 
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        MongooseModule.forRootAsync({
-          useFactory: async () => {
-            mongod = await MongoMemoryServer.create()
-            return {
-              uri: mongod.getUri(),
-            }
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        TodoService,
+        {
+          provide: getModelToken('Todo'),
+          useValue: {
+            new: jest.fn(),
+            constructor: jest.fn(),
+            find: jest.fn(),
+            findOne: jest.fn(),
+            update: jest.fn(),
+            create: jest.fn(),
+            remove: jest.fn(),
+            exec: jest.fn(),
           },
-        }),
-        TodoModule,
+        },
       ],
+      controllers: [TodoController],
     }).compile()
 
-    app = moduleFixture.createNestApplication()
-    await app.init()
-    fetch = makeFetch(app.getHttpServer())
+    todoService = module.get(TodoService)
+    todoController = module.get(TodoController)
   })
 
-  afterAll(async () => {
-    mongod.stop({ doCleanup: true })
-    app.close()
-  })
-
-  it('should get todos', async () => {
-    // Act
-    const response = await fetch('/todos')
+  it('should find todo by ID', async () => {
+    // Arrange
+    const result = {
+      id: '123-123-123',
+      content: 'lorem',
+      createdAt: new Date(),
+    } as Todo
+    jest
+      .spyOn(todoService, 'findOne')
+      .mockImplementation(() => new Promise((resolve) => resolve(result)))
 
     // Assert
-    expect(response.statusText).toEqual('OK')
+    expect(await todoController.find(result.id)).toBe(result)
   })
 })

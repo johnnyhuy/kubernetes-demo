@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "rootDirs": [
-      "apps/todo-backend",
-      "apps/todo-frontend"
-    ]
-  }
-}
