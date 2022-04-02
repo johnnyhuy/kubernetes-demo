@@ -1,0 +1,46 @@
+kube-prometheus-stack:
+  fullnameOverride: kube-system
+  alertmanager:
+    enabled: true
+    alertmanagerSpec:
+      fullnameOverride: alertmanager
+
+  grafana:
+    enabled: true
+    fullnameOverride: grafana
+
+  kubeApiServer:
+    enabled: true
+
+  kubelet:
+    enabled: true
+
+  kubeControllerManager:
+    enabled: true
+
+  coreDns:
+    enabled: true
+
+  kubeDns:
+    enabled: false
+
+  kubeEtcd:
+    enabled: true
+
+  kubeScheduler:
+    enabled: true
+
+  kubeProxy:
+    enabled: true
+
+  kubeStateMetrics:
+    enabled: true
+
+  kube-state-metrics:
+    fullnameOverride: kube-state-metrics
+
+  nodeExporter:
+    enabled: true
+
+  prometheus-node-exporter:
+    fullnameOverride: node-exporter
