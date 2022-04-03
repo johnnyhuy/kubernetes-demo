@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "test": "echo 'Skipping unit testing'",
     "format": "prettier --write \"**/*.ts\""
   }
 }
