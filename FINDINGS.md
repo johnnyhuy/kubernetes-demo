@@ -1,5 +1,11 @@
 # Findings
 
+## Minikube UDP tunneling
+
+Minikube does not support UDP tunneling to our host machines. Recommendation here would be to use a different Minikube driver or local cluster environment tool.
+
+[GitHub issue](https://github.com/kubernetes/minikube/issues/12362)
+
 ## Creating databases in MongoDB
 
 We don't need to create databases, we just need a user to be logged into the `admin` database.

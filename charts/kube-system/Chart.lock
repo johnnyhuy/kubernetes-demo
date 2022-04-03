@@ -2,8 +2,5 @@ dependencies:
 - name: kube-prometheus-stack
   repository: https://prometheus-community.github.io/helm-charts
   version: 34.6.0
-- name: prometheus-statsd-exporter
-  repository: https://prometheus-community.github.io/helm-charts
-  version: 0.4.2
-digest: sha256:4486a51b63bcd86aad8e5750dba67a9e331415f8b8fb787d37d02b89e0c7e269
-generated: "2022-04-03T14:41:43.103566+10:00"
+digest: sha256:5f18946aeb9fed980b4745265b1b0fd3a8015755dc54ae66a5f276503314b7f9
+generated: "2022-04-03T15:41:14.582806+10:00"

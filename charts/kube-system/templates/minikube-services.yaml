@@ -1,23 +1,6 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: minikube-prometheus-statsd-exporter
-  namespace: {{ .Release.Namespace }}
-spec:
-  ports:
-    - name: statsd-udp
-      protocol: UDP
-      port: {{ index .Values "prometheus-statsd-exporter" "statsd" "udpPort" }}
-      targetPort: statsd-udp
-  selector:
-    app.kubernetes.io/instance: {{ .Release.Namespace }}
-    app.kubernetes.io/name: prometheus-statsd-exporter
-  type: LoadBalancer
----
-
-apiVersion: v1
-kind: Service
-metadata:
   name: minikube-grafana
   namespace: {{ .Release.Namespace }}
 spec:
