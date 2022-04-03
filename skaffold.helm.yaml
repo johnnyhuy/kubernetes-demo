@@ -1,7 +1,7 @@
 apiVersion: skaffold/v2beta27
 kind: Config
 metadata:
-  name: monitoring
+  name: kube-system
 profiles:
   - name: local
     activation:
@@ -14,16 +14,9 @@ profiles:
                 command: ["sh", "-c", "./bin/helm-repo-add.sh"]
                 os: [darwin, linux]
         releases:
-          - name: todo
-            chartPath: charts/todo
-            wait: true
-            createNamespace: true
-            namespace: default
-    portForward:
-      - resourceType: service
-        resourceName: grafana
-        namespace: kube-system
-        port: 3000
+          - name: kube-system
+            chartPath: charts/kube-system
+            namespace: kube-system
 ---
 
 apiVersion: skaffold/v2beta27
@@ -77,7 +70,6 @@ profiles:
         releases:
           - name: todo
             chartPath: charts/todo
-            wait: true
             createNamespace: true
             namespace: default
 
