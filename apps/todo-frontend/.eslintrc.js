@@ -4,7 +4,7 @@ require('@rushstack/eslint-patch/modern-module-resolution')
 module.exports = {
   parser: 'vue-eslint-parser',
   parserOptions: {
-    project: 'tsconfig.json',
+    project: './tsconfig.json',
     sourceType: 'module',
     tsconfigRootDir: __dirname,
     ecmaVersion: '2021',
