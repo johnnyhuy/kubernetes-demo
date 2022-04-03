@@ -6,14 +6,15 @@ COPY package.json .
 COPY yarn.lock .
 RUN yarn
 
-COPY public/ .
-COPY src/ .
+COPY public/ ./public/
+COPY src/ ./src/
 COPY .env .
 COPY .eslintrc.js .
 COPY index.html .
 COPY postcss.config.js .
 COPY tailwind.config.js .
 COPY tsconfig.json .
+COPY tsconfig.node.json .
 COPY vite.config.ts .
 RUN yarn build
 
