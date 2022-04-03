@@ -1,9 +1,19 @@
-FROM node:16-alpine
+FROM --platform=linux/amd64 node:16-alpine as build
 
 WORKDIR /opt/app
 
-COPY package* ./
+COPY package.json .
+COPY yarn.lock .
 RUN yarn
-COPY . .
 
-CMD [ "yarn", "start:dev" ]
+COPY . .
+RUN yarn build
+
+FROM --platform=linux/amd64 node:16-alpine as run
+
+WORKDIR /opt/app
+
+COPY --from=build /opt/app/dist /opt/app/dist
+COPY --from=build /opt/app/node_modules /opt/app/node_modules
+
+CMD [ "node", "/opt/app/dist/main.js" ]
