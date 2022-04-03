@@ -13,7 +13,8 @@ profiles:
         - image: johnnyhuy/todo-frontend
           context: apps/todo-frontend
           docker:
-            cliFlags: 
+            dockerfile: dev.Dockerfile
+            cliFlags:
               - --platform
               - linux/amd64
           sync:
@@ -32,6 +33,7 @@ profiles:
         - image: johnnyhuy/todo-backend
           context: apps/todo-backend
           docker:
+            dockerfile: dev.Dockerfile
             cliFlags: 
               - --platform
               - linux/amd64
@@ -39,6 +41,7 @@ profiles:
             manual:
               - src: 'src/**/*'
                 dest: .
+
     deploy:
       kubectl:
         manifests:
@@ -54,3 +57,31 @@ profiles:
         resourceName: todo-backend
         namespace: default
         port: 8081
+
+  - name: prod
+    activation:
+      - kubeContext: minikube
+    build:
+      tagPolicy:
+        sha256: {}
+      artifacts:
+        - image: johnnyhuy/todo-frontend
+          context: apps/todo-frontend
+          docker:
+            dockerfile: prod.Dockerfile
+            cliFlags:
+              - --platform
+              - linux/amd64
+
+        - image: johnnyhuy/todo-backend
+          context: apps/todo-backend
+          docker:
+            dockerfile: prod.Dockerfile
+            cliFlags: 
+              - --platform
+              - linux/amd64
+
+    deploy:
+      kubectl:
+        manifests:
+          - kubernetes/*

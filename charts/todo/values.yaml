@@ -1,1 +1,11 @@
-# Silence is bliss
+backend:
+  replicas: 1
+  image:
+    repository: ~
+    tag: ~
+
+frontend:
+  replicas: 1
+  image:
+    repository: ~
+    tag: ~

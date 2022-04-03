@@ -1,17 +1,23 @@
 local-cluster:
-	minikube start --memory 4096m --cpus 2 --apiserver-names=host.docker.internal
+	minikube start --memory 7936m --cpus 3 --apiserver-names=host.docker.internal
 
-dev:
-	skaffold dev
+dev-todo:
+	skaffold dev -m todo
 
-dev-helm:
-	skaffold dev -f skaffold.helm.yaml
+dev-todo-helm:
+	skaffold dev -f skaffold.helm.yaml -m todo
 
-up:
-	skaffold build -q | skaffold deploy --build-artifacts -
+deploy-dev:
+	skaffold build -q | skaffold deploy  -p dev --build-artifacts -
 
-up-helm:
-	skaffold build -q | skaffold deploy -f skaffold.helm.yaml --build-artifacts -
+deploy-dev-helm:
+	skaffold build -q | skaffold deploy -f skaffold.helm.yaml  -p dev --build-artifacts -
+
+deploy-prod:
+	skaffold build -q | skaffold deploy -p prod --build-artifacts -
+
+deploy-prod-helm:
+	skaffold build -q | skaffold deploy -f skaffold.helm.yaml -p prod --build-artifacts -
 
 tunnel:
 	minikube tunnel -c

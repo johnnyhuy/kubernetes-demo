@@ -17,6 +17,19 @@ profiles:
           - name: kube-system
             chartPath: charts/kube-system
             namespace: kube-system
+
+  - name: prod
+    deploy:
+      helm:
+        hooks:
+          before:
+            - host:
+                command: ["sh", "-c", "./bin/helm-repo-add.sh"]
+                os: [darwin, linux]
+        releases:
+          - name: kube-system
+            chartPath: charts/kube-system
+            namespace: kube-system
 ---
 
 apiVersion: skaffold/v2beta27
@@ -34,6 +47,7 @@ profiles:
         - image: johnnyhuy/todo-frontend
           context: apps/todo-frontend
           docker:
+            dockerfile: dev.Dockerfile
             cliFlags: 
               - --platform
               - linux/amd64
@@ -53,6 +67,7 @@ profiles:
         - image: johnnyhuy/todo-backend
           context: apps/todo-backend
           docker:
+            dockerfile: dev.Dockerfile
             cliFlags: 
               - --platform
               - linux/amd64
@@ -70,8 +85,12 @@ profiles:
         releases:
           - name: todo
             chartPath: charts/todo
-            createNamespace: true
             namespace: default
+            artifactOverrides:
+              frontend.image: johnnyhuy/todo-frontend
+              backend.image: johnnyhuy/todo-backend
+            imageStrategy:
+              helm: {}
 
     portForward:
       - resourceType: service
@@ -83,3 +102,44 @@ profiles:
         resourceName: todo-backend
         namespace: default
         port: 8081
+
+  - name: prod
+    activation:
+      - kubeContext: minikube
+    build:
+      tagPolicy:
+        sha256: {}
+      artifacts:
+        - image: johnnyhuy/todo-frontend
+          context: apps/todo-frontend
+          docker:
+            dockerfile: prod.Dockerfile
+            cliFlags: 
+              - --platform
+              - linux/amd64
+
+        - image: johnnyhuy/todo-backend
+          context: apps/todo-backend
+          docker:
+            dockerfile: prod.Dockerfile
+            cliFlags: 
+              - --platform
+              - linux/amd64
+    deploy:
+      helm:
+        hooks:
+          before:
+            - host:
+                command: ["sh", "-c", "./bin/helm-repo-add.sh"]
+                os: [darwin, linux]
+        releases:
+          - name: todo
+            chartPath: charts/todo
+            namespace: default
+            valuesFiles:
+              - charts/todo/values.prod.yaml
+            artifactOverrides:
+              frontend.image: johnnyhuy/todo-frontend
+              backend.image: johnnyhuy/todo-backend
+            imageStrategy:
+              helm: {}
