@@ -1,5 +1,5 @@
 kube-prometheus-stack:
-  fullnameOverride: kube-system
+  fullnameOverride: prometheus
   alertmanager:
     enabled: true
     alertmanagerSpec:
@@ -44,3 +44,9 @@ kube-prometheus-stack:
 
   prometheus-node-exporter:
     fullnameOverride: node-exporter
+
+prometheus-statsd-exporter:
+  fullnameOverride: prometheus-statsd-exporter
+  statsd:
+    udpPort: 9125
+  

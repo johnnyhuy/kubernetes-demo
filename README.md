@@ -80,7 +80,9 @@ skaffold build -q | skaffold deploy --build-artifacts -
 
 ## Monitoring
 
-> TODO
+```sh
+
+```
 
 ## Load Testing
 
