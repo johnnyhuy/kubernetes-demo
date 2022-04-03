@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2022",
     "moduleResolution": "node",
     "module": "commonjs",
-    "noEmit": true,
+    "noEmit": false,
     "allowJs": true,
     "removeComments": false,
 
@@ -21,6 +21,10 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "src/*"
+  ]
 }

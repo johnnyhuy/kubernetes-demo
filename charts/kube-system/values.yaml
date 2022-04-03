@@ -56,12 +56,4 @@ kube-prometheus-stack:
       selfMonitor: false
     prometheusSpec:
       serviceMonitorSelectorNilUsesHelmValues: false
-
-prometheus-statsd-exporter:
-  fullnameOverride: prometheus-statsd-exporter
-  statsd:
-    udpPort: 8125
-  serviceMonitor:
-    enabled: true
-    namespace: kube-system
   

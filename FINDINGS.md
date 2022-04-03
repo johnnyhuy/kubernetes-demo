@@ -1,5 +1,11 @@
 # Findings
 
+## Can't export metrics with StatsD from k6 with Minikube
+
+Running k6 to export metrics to StatsD since it requires UDP tunneling on Minikube.
+
+We can still export metrics with other tools like New Relic or CloudWatch.
+
 ## Minikube UDP tunneling
 
 Minikube does not support UDP tunneling to our host machines. Recommendation here would be to use a different Minikube driver or local cluster environment tool.
