@@ -26,7 +26,7 @@
     "webpack-glob-entries": "^1.0.1"
   },
   "scripts": {
-    "start": "webpack",
+    "build": "webpack",
     "format": "prettier --write \"**/*.ts\""
   }
 }

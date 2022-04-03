@@ -67,7 +67,29 @@ brew bundle
 
 ```sh
 # Start local cluster
-minikube start --memory 4096m --cpus 2
+make minikube
+```
+
+## Monitoring
+
+```sh
+make tunnel
+```
+
+## Load Testing
+
+```sh
+make tunnel
+```
+
+## Chaos Testing
+
+> TODO
+
+## Contributing
+
+```bash
+make minikube
 
 # Build images, deploy, port-forward and watch for changes
 skaffold dev
@@ -77,20 +99,6 @@ skaffold dev
 # Do everything `skaffold dev` except watching & port-forwarding
 skaffold build -q | skaffold deploy --build-artifacts -
 ```
-
-## Monitoring
-
-```sh
-
-```
-
-## Load Testing
-
-> TODO
-
-## Chaos Testing
-
-> TODO
 
 ## Findings
 

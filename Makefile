@@ -15,3 +15,8 @@ up-helm:
 
 tunnel:
 	minikube tunnel -c
+
+load-test:
+	yarn
+	yarn workspace load-testing build
+	k6 run --out statsd load-testing/dist/get-200-status-test.js

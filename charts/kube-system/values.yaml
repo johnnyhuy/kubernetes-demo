@@ -48,5 +48,8 @@ kube-prometheus-stack:
 prometheus-statsd-exporter:
   fullnameOverride: prometheus-statsd-exporter
   statsd:
-    udpPort: 9125
+    udpPort: 8125
+  serviceMonitor:
+    enabled: true
+    namespace: kube-system
   
