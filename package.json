@@ -7,7 +7,8 @@
   "license": "MIT",
   "workspaces": [
     "./apps/todo-frontend",
-    "./apps/todo-backend"
+    "./apps/todo-backend",
+    "./load-testing"
   ],
   "scripts": {
     "format": "yarn workspaces run format",
