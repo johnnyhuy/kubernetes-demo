@@ -23,6 +23,6 @@ FROM --platform=linux/amd64 nginx:alpine as run
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 
 RUN rm -rf /usr/share/nginx/html/*
-COPY --from=build /opt/app/dist /usr/share/nginx/html
+COPY --from=build /opt/app/dist/ /usr/share/nginx/html
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
