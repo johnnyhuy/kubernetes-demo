@@ -19,6 +19,9 @@ deploy-prod:
 deploy-prod-helm:
 	skaffold build -q | skaffold deploy -f skaffold.helm.yaml -p prod --build-artifacts -
 
+deploy-monitoring:
+	skaffold deploy -f skaffold.helm.yaml -p prod -m kube-system
+
 tunnel:
 	minikube tunnel -c
 

@@ -55,31 +55,56 @@ Notable tools including, but not limited to:
 
 #### MacOS
 
+Use Homebrew to install required tools.
+
 ```sh
 brew bundle
+
+# Install NodeJS
+nvm use 16
 ```
 
 #### Windows
 
-> Work in progress - open to suggestions
+Use Chocolatey to install required tools. Run the PowerShell script as admin.
+
+```ps1
+.\Install-ChocoTools.ps1
+
+# Install NodeJS
+nvm use 16
+```
+
+#### Multi-platform
+
+Alternatively, we can use VSCode dev containers to open a cluster environment. This only requires Docker.
+
+Open this project in VSCode, `ctrl + p` and enter `Remote-Containers: Rebuild and Reopen in Container`.
 
 ### Usage
 
+> Feel free to inspect `make` commands in the [`Makefile`](./Makefile)
+
 ```sh
 # Start local cluster
-make minikube
+make local-cluster
+
+# Create a tunnel between Minikube and our local machine (localhost)
+make tunnel
 ```
 
 ## Monitoring
 
 ```sh
-make tunnel
+make deploy-monitoring
 ```
 
 ## Load Testing
 
+We can run load tests locally. This requires `k6` and NodeJS with Yarn.
+
 ```sh
-make tunnel
+make load-test
 ```
 
 ## Chaos Testing
@@ -89,7 +114,8 @@ make tunnel
 ## Contributing
 
 ```bash
-make minikube
+# Start local cluster
+make local-cluster
 
 # Build images, deploy, port-forward and watch for changes
 skaffold dev
