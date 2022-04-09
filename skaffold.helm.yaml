@@ -8,11 +8,6 @@ profiles:
       - kubeContext: minikube
     deploy:
       helm:
-        hooks:
-          before:
-            - host:
-                command: ["sh", "-c", "./bin/helm-repo-add.sh"]
-                os: [darwin, linux]
         releases:
           - name: kube-system
             chartPath: charts/kube-system
@@ -21,15 +16,36 @@ profiles:
   - name: prod
     deploy:
       helm:
-        hooks:
-          before:
-            - host:
-                command: ["sh", "-c", "./bin/helm-repo-add.sh"]
-                os: [darwin, linux]
         releases:
           - name: kube-system
             chartPath: charts/kube-system
             namespace: kube-system
+---
+
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: chaos-testing
+profiles:
+  - name: local
+    activation:
+      - kubeContext: minikube
+    deploy:
+      helm:
+        releases:
+          - name: chaos-testing
+            chartPath: charts/chaos-testing
+            namespace: chaos-testing
+            createNamespace: true
+
+  - name: prod
+    deploy:
+      helm:
+        releases:
+          - name: chaos-testing
+            chartPath: charts/chaos-testing
+            namespace: chaos-testing
+            createNamespace: true
 ---
 
 apiVersion: skaffold/v2beta27
@@ -77,11 +93,6 @@ profiles:
                 dest: .
     deploy:
       helm:
-        hooks:
-          before:
-            - host:
-                command: ["sh", "-c", "./bin/helm-repo-add.sh"]
-                os: [darwin, linux]
         releases:
           - name: todo
             chartPath: charts/todo
@@ -127,11 +138,6 @@ profiles:
               - linux/amd64
     deploy:
       helm:
-        hooks:
-          before:
-            - host:
-                command: ["sh", "-c", "./bin/helm-repo-add.sh"]
-                os: [darwin, linux]
         releases:
           - name: todo
             chartPath: charts/todo
