@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: todo-app-kubernetes-todo-backend
+  title: Todo Backend
+  description: The backend for the todo app running on Kubernetes
+  tags:
+    - nodejs
+    - docker
+spec:
+  type: service
+  lifecycle: experimental
+  owner: johnnyhuy
+  system: todo-app-kubernetes

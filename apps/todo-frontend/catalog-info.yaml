@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: todo-app-kubernetes-todo-frontend
+  title: Todo Frontend
+  description: The frontend for the todo app running on Kubernetes
+  tags:
+    - vuejs
+    - docker
+spec:
+  type: service
+  lifecycle: experimental
+  owner: johnnyhuy
+  system: todo-app-kubernetes

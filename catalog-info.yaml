@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: todo-app-kubernetes
+  description: A simple todo app running on Kubernetes
+  tags:
+    - kubernetes
+spec:
+  owner: johnnyhuy
+  lifecycle: experimental
